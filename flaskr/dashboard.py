@@ -8,17 +8,19 @@ from flaskr.db import get_db
 
 bp = Blueprint('dashboard', __name__)
 
+
 @bp.route('/')
 def index():
-    db = get_db()
-    user_id = session.get('user_id')
-    books = db.execute(
-        'SELECT b.id, b.name, b.author, b.publisher,b.yera_of_publication, ub.possessedid, u.name FROM books b, users u,users_books ub where  u.id = ub.ownerid AND b.id = ub.bookid AND  u.id=?',(user_id,)
-    ).fetchall()
-    rentedbooks = db.execute(
-        'SELECT b.id, b.name, b.author, b.publisher,b.yera_of_publication, ub.possessedid, u.name FROM books b, users u,users_books ub where  u.id = ub.ownerid AND b.id = ub.bookid AND ub.possessedid<>ub.ownerid AND ub.ownerid != ? AND ub.possessedid=?',(user_id,user_id)
-    )
-    return render_template('dashboard/index.html', books=books, rentedbooks = rentedbooks)
+    return "Hello"
+    # db = get_db()
+    # user_id = session.get('user_id')
+    # books = db.execute(
+    #     'SELECT b.id, b.name, b.author, b.publisher,b.yera_of_publication, ub.possessedid, u.name FROM books b, users u,users_books ub where  u.id = ub.ownerid AND b.id = ub.bookid AND  u.id=?',(user_id,)
+    # ).fetchall()
+    # rentedbooks = db.execute(
+    #     'SELECT b.id, b.name, b.author, b.publisher,b.yera_of_publication, ub.possessedid, u.name FROM books b, users u,users_books ub where  u.id = ub.ownerid AND b.id = ub.bookid AND ub.possessedid<>ub.ownerid AND ub.ownerid != ? AND ub.possessedid=?',(user_id,user_id)
+    # )
+    # return render_template('dashboard/index.html', books=books, rentedbooks = rentedbooks)
 
 
 @bp.route('/create', methods=('GET', 'POST'))
@@ -72,18 +74,19 @@ def findbook():
         #return redirect('dashboard/rent.html', books=books)
     return render_template('dashboard/find.html')
 
+
 @bp.route('/rent/<title>', methods=('GET', 'POST'))
 @login_required
 def rent(title):
     if request.method == 'GET':
         user_id = session.get('user_id')
         db = get_db()
-        #title = title.replace(" ","")
+#       title = title.replace(" ","")
         rentedbooks=db.execute(
                 'SELECT b.id, b.name, b.author, b.publisher, b.yera_of_publication, ub.ownerid FROM books as b, users_books as ub WHERE ub.bookid=b.id AND ub.ownerid=ub.possessedid AND ub.ownerid<> ? AND b.name=?',(user_id, title,)
             ).fetchall()
         db.commit()
-        return render_template('dashboard/rent.html',books=rentedbooks)
+        return render_template('dashboard/rent.html', books=rentedbooks)
     elif request.method == 'POST':
         bookid = request.form['submit_button']
         print("debug: bookid: "+bookid)
