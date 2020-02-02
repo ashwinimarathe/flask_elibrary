@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Books{% endblock %}</h1>
+  {% if g.user %}
+    <a class="action" href="{{ url_for('dashboard.create') }}">Add Books</a>
+    <a class="action" href="{{ url_for('dashboard.findbook') }}">Find Books</a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for book in books %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ book['name'] }}</h1>
+          <div class="about">by {{ book['author'] }} published in {{ book['yera_of_publication']}}</div>
+        </div>        
+      </header>
+      <p class="body">{{ book['body'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+
+{% block header1 %}
+  <h1>{% block title1 %}Rented Books{% endblock %}</h1>
+{% endblock %}
+{% block content1 %}
+  {% for rentedbook in rentedbooks %}
+    <article class="post">
+      <header>
+        <div>
+          <h1>{{ rentedbook['name'] }}</h1>
+          <div class="about">by {{ rentedbook['author'] }} published in {{ rentedbook['yera_of_publication']}}</div>
+        </div>        
+      </header>
+      <p class="body">{{ rentedbook['body'] }}</p>
+    </article>
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
+
