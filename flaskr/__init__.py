@@ -4,6 +4,7 @@ from flask import Flask
 from . import db
 from . import auth
 from . import dashboard
+from .flaskr import app
 
 
 def create_app(test_config=None):
